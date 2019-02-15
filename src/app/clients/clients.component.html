@@ -1,0 +1,59 @@
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+  <h1 class="h2">Listes Clients</h1>
+  <!-- It won't show if there is no client data -->
+  <a routerLink="/register-client" class="btn btn-success" *ngIf="hideWhenNoStudent">
+    <i class="fas fa-plus custom-fa-plus"></i>
+    Ajouter Client
+  </a>
+</div>
+
+<div class="pricing-header mx-auto">
+
+  <!-- Preloader shows before the data loads-->
+  <div class="no-data text-center" *ngIf="preLoader">
+    <img src="assets/preloader.gif" class="preloader-icon" alt="No client">
+  </div>
+
+  <!-- No data shows when their is no client data available -->
+  <div class="no-data text-center" *ngIf="noData">
+    <img src="assets/no-client.svg" class="nodata-msg" alt="No client">
+    <p class="nodata-msg">No client added yet!</p>
+    <a routerLink="/add-client" class="btn btn-success">
+      <i class="fas fa-plus custom-fa-plus"></i>
+      Ajouter Client
+    </a>
+  </div>
+
+  <!-- Showing clients data -->
+  <div class="table-responsive" *ngIf="hideWhenNoStudent">
+    <table class="table table-bordered table-responsive-sm table-responsive-md table-responsive-lg">
+      <thead>
+        <tr>
+          <th scope="col">Nom & Prenom</th>
+          <th scope="col">Email</th>
+          <th scope="col">Telephone</th>
+          <th scope="col">Adresse</th>
+          <th scope="col">Ville</th>
+          <th class="text-center" scope="col">Modifier</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- *ngFor loop iterates over Student array and fetch the client's data -->
+        <!-- paginate pipe will add pagination in client's list, it won't show if items are less then 7 -->
+        <tr *ngFor="let client of Client | paginate: { itemsPerPage: 7, currentPage: p }; let i = index;">
+          <td>{{client.nom}} {{client.prenom}}</td>
+          <td>{{client.email}}</td>
+          <td>{{client.telephone}}</td>
+          <td>{{client.adresse}}</td>
+          <td>{{client.ville}}</td>
+          <td class="text-center action-block">
+            <!-- routerLink="/edit-client/{{client.$key}}" is refered to { path: 'edit-client/:id', component: EditStudentComponent } in app-routing.moudles.ts -->
+            <i class="far fa-edit" routerLink="/edit-client/{{client.$key}}"></i>
+            <i class="far fa-trash-alt" (click)="SupprimerClient(client)"></i></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <!-- Pagination -->
+  <pagination-controls (pageChange)="p = $event" autoHide="true" responsive="true"></pagination-controls>
+</div>
